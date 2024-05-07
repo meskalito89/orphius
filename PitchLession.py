@@ -1,14 +1,16 @@
 from midiutil import MIDIFile
-
-#NOTES = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B']
+from random import randint
 
 class PitchLession(MIDIFile):
     def __init__(self,
+        note: int,
+        distance: int,
+        output_file: str,
         track = 0,
         channel = 0,
         time = 0, 
         duration = 1,
-        tempo = 120,
+        tempo = 100,
         volume = 100,
     ):
         super().__init__(1)
@@ -18,9 +20,13 @@ class PitchLession(MIDIFile):
         self.duration = duration
         self.tempo = tempo
         self.volume = volume
-
+        self.note = note
+        self.distance = distance
         self.addTempo(self.track, self.time, self.tempo)
-        for time, pitch in enumerate(range(60, 100)):
-            self.addNote(self.track, self.channel, pitch, time*4, self.duration, self.volume)
-        with open('test2.mid', 'wb') as file:
+
+        self.addNote(self.track, self.channel, self.note, time*4, self.duration, self.volume)
+        self.addNote(self.track, self.channel, self.note + self.distance, time*4+1, self.duration, self.volume)
+
+        with open(output_file, 'wb') as file:
             self.writeFile(file)
+    
