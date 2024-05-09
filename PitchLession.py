@@ -15,6 +15,7 @@ class PitchLession(MIDIFile):
         duration = 1,
         tempo = 100,
         volume = 100,
+        repeat = 1,
     ):
         super().__init__(1)
         self.track = track
@@ -25,10 +26,13 @@ class PitchLession(MIDIFile):
         self.volume = volume
         self.note = note
         self.distance = distance
+        self.repeat = repeat
         self.addTempo(self.track, self.time, self.tempo)
 
-        self.addNote(self.track, self.channel, self.note, time*4, self.duration, self.volume)
-        self.addNote(self.track, self.channel, self.note + self.distance, time*4+1, self.duration, self.volume)
+        for i in range(self.repeat):
+            self.addNote(self.track, self.channel, self.note, i*2, self.duration, self.volume)
+            self.addNote(self.track, self.channel, self.note + self.distance, i*2+1, self.duration, self.volume)
+
         # with open(output_file, 'wb') as file:
         #     self.writeFile(file)
     

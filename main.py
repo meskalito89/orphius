@@ -51,9 +51,10 @@ SOUND_FONT = 'sound_fonts/Yamaha_C3_Grand_Piano.sf2'
 # create_lession()
 
 def main():
-    l = PitchLession(note=60, distance=7)
-    with tempfile.NamedTemporaryFile('b+w') as wav_file:
-        l.to_wav('sound_fonts/Yamaha_C3_Grand_Piano.sf2', wav_file.name)
+    l = PitchLession(note=60, distance=7, repeat=3)
+    l.to_wav('sound_fonts/Yamaha_C3_Grand_Piano.sf2', "output.wav")
+    # with tempfile.NamedTemporaryFile('b+w') as wav_file:
+    #     l.to_wav('sound_fonts/Yamaha_C3_Grand_Piano.sf2', wav_file.name)
     
 
 if __name__ == "__main__":
