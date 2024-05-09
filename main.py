@@ -1,61 +1,55 @@
 from PitchLession import PitchLession
 from midi2audio import FluidSynth
+import pydub
 import tempfile
 import wave
 from pdb import set_trace
+import random
 
 REPEAT = 2
 SOUND_FONT = 'sound_fonts/Yamaha_C3_Grand_Piano.sf2'
+MIN_NOTE = 60
+MAX_NOTE = 80
+MAX_DISTANCE = 12
+COUNT_OF_LESSIONS = 10
+
+ANSWERS = [
+    'answers/0.wav',
+    'answers/1.wav',
+    'answers/2.wav',
+    'answers/3.wav',
+    'answers/4.wav',
+    'answers/5.wav',
+    'answers/6.wav',
+    'answers/7.wav',
+    'answers/8.wav',
+    'answers/9.wav',
+    'answers/10.wav',
+    'answers/11.wav',
+    'answers/12.wav',
+]
 
 
-# def connect_wav_files(wav_files:list[bytearray]) -> bytearray :
-#     HEAD_BYTES_IN_WAV = 0
-#     tmp_file = tempfile.TemporaryFile('+ba')
-#     for i, file in enumerate(wav_files):
-#         file.seek(HEAD_BYTES_IN_WAV)
-#         if i == 0:
-#            file.seek(0) 
-#         tmp_file.write(file.read())
-#     tmp_file.seek(0)
-#     return tmp_file
-
-
-
-
-# def create_lession():
-#     PitchLession(note=60, distance=7, output_file='output.mid')
-#     fs = FluidSynth(SOUND_FONT)
-#     fs.midi_to_audio("output.mid", 'output.wav')
-#     data = []
-#     for i in range(REPEAT):
-#         with wave.open('output.wav') as w:
-#             data.append( [w.getparams(), w.readframes(w.getnframes())] )
-#     with wave.open('answers/2.wav') as w:
-#         data.append([w.getparams(), w.readframes(w.getnframes())])
-#     with wave.open('result.wav', 'wb') as result:
-#         result.setparams(data[0][0])
-#         for i in range(len(data)):
-#             result.writeframes(data[i][1])
-
-# def create_lession():
-#     l = PitchLession(note=60, distance=-7)
-#     with tempfile.NamedTemporaryFile('b+w') as midi_file, tempfile.NamedTemporaryFile('b+w') as wav_file:
-#         l.writeFile(midi_file)
-#         midi_file.seek(0)
-#         fs = FluidSynth(SOUND_FONT)
-#         fs.midi_to_audio(midi_file.name, wav_file.name)
-#         with open('output.wav', 'bw') as f:
-#             result = connect_wav_files([wav_file, wav_file, wav_file])
-#             f.write(result.read())
-
-# create_lession()
 
 def main():
-    l = PitchLession(note=60, distance=7, repeat=3)
-    l.to_wav('sound_fonts/Yamaha_C3_Grand_Piano.sf2', "output.wav")
-    # with tempfile.NamedTemporaryFile('b+w') as wav_file:
-    #     l.to_wav('sound_fonts/Yamaha_C3_Grand_Piano.sf2', wav_file.name)
-    
+    distance1 = random.randint(0, 13)
+    distance_is_greather_then_0 = random.choice([-1, 1])
+    distance2 = distance1 * distance_is_greather_then_0
+
+    # with tempfile.NamedTemporaryFile('b+w') as notes_file, tempfile.NamedTemporaryFile('ba') as result:
+    with open('result.wav', 'ba') as result:
+        for i in range(COUNT_OF_LESSIONS):
+            set_trace() #TODO перезаписывает файл на каждой итерации
+            l = PitchLession(note=60, distance=distance2, repeat=2)
+            l.to_wav(SOUND_FONT, result.name)
+            seq = pydub.AudioSegment.from_wav(result.name)
+            seq2 = pydub.AudioSegment.from_wav(ANSWERS[distance1])
+            r = seq.append(seq2)
+            r.export(result.name, format='wav')
+        
+            # with tempfile.NamedTemporaryFile('b+w') as wav_file:
+            #     l.to_wav('sound_fonts/Yamaha_C3_Grand_Piano.sf2', wav_file.name)
+        
 
 if __name__ == "__main__":
     main()
