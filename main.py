@@ -31,7 +31,7 @@ ANSWERS = [
 def main():
     files = []
     for i in range(COUNT_OF_LESSIONS):
-        random_note = random.randomint(60, 80)
+        random_note = random.randint(60, 80)
         distance1 = random.randint(0, 12)
         distance_is_greather_then_0 = random.choice([-1, 1])
         distance2 = distance1 * distance_is_greather_then_0
