@@ -52,7 +52,7 @@ def main():
         file.seek(0)
         os.remove(f'{last_file_name}.mp3')
         file_name, number = last_file_name.split('_')
-        new_file_name = '_'.join([file_name, str(int(number) + 1)])
+        new_file_name = '_'.join([file_name.strip(), str(int(number) + 1)])
         file.write(f'{key}={new_file_name}')
         with open(f'{new_file_name}.mp3', 'wb') as result:
             combined.export(result.name, format='mp3')
