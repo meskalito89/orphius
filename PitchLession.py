@@ -6,6 +6,7 @@ from pdb import set_trace
 
 class PitchLession(MIDIFile):
     def __init__(self,
+        sound_font,
         note: int,
         distance: int,
         # output_file: str,
@@ -28,6 +29,7 @@ class PitchLession(MIDIFile):
         self.distance = distance
         self.repeat = repeat
         self.addTempo(self.track, self.time, self.tempo)
+        self.sound_font = sound_font
 
         for i in range(self.repeat):
             self.addNote(self.track, self.channel, self.note, i*2, self.duration, self.volume)
@@ -42,12 +44,16 @@ class PitchLession(MIDIFile):
     #     self.file.seek(0)
     #     return self.file
         
-    def to_wav(self, sound_font: str, output_file: str):
-        fs = FluidSynth(sound_font)
+    def to_wav(self, output_file: str):
+        fs = FluidSynth(self.sound_font)
         with tempfile.NamedTemporaryFile('b+w') as midi_file:
             self.writeFile(midi_file)
             midi_file.seek(0)
             fs.midi_to_audio(midi_file.file.name, output_file)
 
-
+    def to_temporary_file(self):
+        '''saves to temporary file'''
+        file = tempfile.NamedTemporaryFile('b+w')
+        self.to_wav(file.name)
+        return file
 
