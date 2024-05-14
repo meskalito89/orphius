@@ -1,15 +1,18 @@
 from PitchLession import PitchLession
+import re
 import pydub
 import tempfile
 import random
 import os
 
+from pdb import set_trace
 REPEAT = 2
 SOUND_FONT = 'sound_fonts/Yamaha_C3_Grand_Piano.sf2'
 MIN_NOTE = 60
 MAX_NOTE = 80
 MAX_DISTANCE = 12
 COUNT_OF_LESSIONS = 20
+LESSION_PATH = 'lession'
 
 ANSWERS = [
     'answers/0.wav',
@@ -27,6 +30,9 @@ ANSWERS = [
     'answers/12.wav',
 ]
 
+def clear_lession_folder():
+    for file in os.scandir(LESSION_PATH):
+        os.remove(file)
 
 def main():
     files = []
@@ -46,15 +52,19 @@ def main():
     for wav in files[1:]:
         combined = combined.append(wav)
 
-    # with tempfile.NamedTemporaryFile('w+') as result:
     with open('meta.txt', 'r+') as file:
         key, last_file_name = file.readline().split("=")
+        key = key.strip()
+        last_file_name = last_file_name.strip()
         file.seek(0)
-        os.remove(f'{last_file_name}.mp3')
+        clear_lession_folder()
         file_name, number = last_file_name.split('_')
-        new_file_name = '_'.join([file_name.strip(), str(int(number) + 1)])
+        file_name = file_name.strip()
+        new_number = int(number) + 1
+        new_file_name = '_'.join([file_name, str(new_number)])
         file.write(f'{key}={new_file_name}')
-        with open(f'{new_file_name}.mp3', 'wb') as result:
+        new_path = os.path.join(LESSION_PATH, new_file_name+'.mp3')
+        with open(new_path, 'wb') as result:
             combined.export(result.name, format='mp3')
 
 if __name__ == "__main__":
