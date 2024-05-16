@@ -14,7 +14,7 @@ class PitchLession(MIDIFile):
         time = 0, 
         duration = 1,
         tempo = 100,
-        volume = 120,
+        volume = 180,
         repeat = 1,
     ):
         super().__init__(1)
